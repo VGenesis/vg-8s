@@ -1,2 +1,5 @@
 *.swp
+scripts/asm_isa_alias
+scripts/asm_isa_cu_rom
+scripts/asm_isa_hex_table
 
