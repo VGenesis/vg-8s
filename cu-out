@@ -1,0 +1,487 @@
+##-----------------##
+|| Control signals ||
+##-----------------##
+
+C0	Write Enable Register A
+C1	Write Enable Register B
+C2	Write Enable Register C
+C3	Write Enable Register D
+C4	Write Enable Register TEMP
+C5	Write Enable PSW
+C6
+C7
+
+C8	Output Enable ALU0
+C9	Output Enable ALU1
+C10	Output Enable Register OUT
+C11	Write Enable Register OUT
+C12	
+C13	
+C14
+C15
+
+C16	Output Enable PC
+C17	Count Enable PC
+C18	Output Enable IRH
+C19	Write Enable IRH
+C20	Output Enable IRL
+C21 Write Enable IRL
+C22
+C23
+
+C24	Output Enable MAR
+C25	Write Enable MAR
+C26	Output Enable MBR
+C27	Write Enable MBR
+C28	Output Enable RAM
+C29	Write Enable RAM
+C30	IOB Enable MBR
+C31	Signal INS_END
+
+##--------------##
+|| Instructions ||
+##--------------##
+
+### LOAD Instructions:	0x00-0x0f
+	0x--:	LOAD INSTRUCTION - Before all instructions
+		1)	C16	C25							PC -> MAR
+		2)	C24	C28	C27						RAM[MAR] -> MBR
+		3)	C26	C19 C17						MBR -> IRH | PC++
+
+	0x00:	LDIMM_A
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C0	C17	C31					MBR -> A | PC++ | INS_END
+	0x01:	LDIMM_B
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C1	C17	C31					MBR -> B | PC++ | INS_END
+	0x02:	LDIMM_C
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C2	C17	C31					MBR -> C | PC++	| INS_END
+	0x03:	LDIMM_D
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C3	C17	C31					MBR -> D | PC++ | INS_END
+
+	0x04:	LDDIR_A
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C0	C17						MBR -> A | PC++
+	0x05:	LDDIR_B
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C1	C17						MBR -> B | PC++
+	0x06:	LDDIR_C
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C2	C17						MBR -> C | PC++
+	0x07:	LDDIR_D
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C3	C17						MBR -> D | PC++
+	
+	0x08:	LDIND_A
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C21							MBR -> IRL
+		10)	C20	C25							IRL -> MAR
+		11)	C24	C28	C27						RAM[MAR] -> MBR
+		12)	C26	C0	C17						MBR -> A | PC++
+	0x09:	LDIND_B
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C21							MBR -> IRL
+		10)	C20	C25							IRL -> MAR
+		11)	C24	C28	C27						RAM[MAR] -> MBR
+		12)	C26	C1	C17						MBR -> B | PC++
+	0x0a:	LDIND_C
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C21							MBR -> IRL
+		10)	C20	C25							IRL -> MAR
+		11)	C24	C28	C27						RAM[MAR] -> MBR
+		12)	C26	C2	C17						MBR -> C | PC++
+	0x0b:	LDIND_D
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C21							MBR -> IRL
+		7)	C20	C25							IRL -> MAR
+		8)	C24	C28	C27						RAM[MAR] -> MBR
+		9)	C26	C21							MBR -> IRL
+		10)	C20	C25							IRL -> MAR
+		11)	C24	C28	C27						RAM[MAR] -> MBR
+		12)	C26	C3	C17						MBR -> D | PC++
+		
+### MOVE Instructions:	0x10-0x0f
+
+	0x10:	MOV A, 0
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C0	C31						OUT -> A | INS_END
+	0x11:	MOV A, B
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C0	C31						OUT -> A | INS_END
+	0x12:	MOV A, C
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C0	C31						OUT -> A | INS_END
+	0x13:	MOC A, D
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C0	C31						OUT -> A | INS_END
+
+	0x14:	MOV B, 0
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C1							OUT -> B
+	0x15:	MOV B, A
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C1							OUT -> B
+	0x16:	MOV B, C
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C1							OUT -> B
+	0x17:	MOC B, D
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C1							OUT -> B
+
+	0x18:	MOV C, 0
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C2							OUT -> C
+	0x19:	MOV C, A
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C2							OUT -> C
+	0x1a:	MOV C, B
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C2							OUT -> C
+	0x1b:	MOC C, D
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C2							OUT -> C
+
+	0x1c:	MOV D, 0
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C3							OUT -> D
+	0x1d:	MOV D, A
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C3							OUT -> D
+	0x1e:	MOV D, B
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C3							OUT -> D
+	0x1f:	MOV D, C
+		4)	C8	C9							ALU -> OUT
+		5)	C10	C3							OUT -> D
+
+### ARTH Instructions:	0x20-0x5f
+##	ADD:
+	0x20:	ADD A, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+	0x21:	ADD A, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+	0x22:	ADD A, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C11							OUT -> A
+	0x23:	ADD A, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+
+	0x24:	ADD B, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C1							OUT -> B
+	0x25:	ADD B, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C1							OUT -> B
+	0x26:	ADD B, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C1							OUT -> B
+	0x27:	ADD B, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C1							OUT -> B
+
+	0x28:	ADD C, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C2							OUT -> C
+	0x29:	ADD C, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C2							OUT -> C
+	0x2a:	ADD C, 
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C2							OUT -> C
+	0x2b:	ADD C, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C2							OUT -> C
+
+	0x2c:	ADD D, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C3							OUT -> D
+	0x2d:	ADD D, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C3							OUT -> D
+	0x2e:	ADD D, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C3							OUT -> D
+	0x2f:	ADD D, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C3							OUT -> D
+
+##	SUB:
+	0x30:	SUB A, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+	0x31:	SUB A, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+	0x32:	SUB A, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+	0x33:	SUB A, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+	
+	0x34:	SUB B, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C1							OUT -> B
+	0x35:	SUB B, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C1							OUT -> B
+	0x36:	SUB B, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C1							OUT -> B
+	0x37:	SUB B, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C1							OUT -> B
+	
+	0x38:	SUB C, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C2							OUT -> C
+	0x39:	SUB C, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C2							OUT -> C
+	0x3a:	SUB C, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C2							OUT -> C
+	0x3b:	SUB C, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C2							OUT -> C
+	
+	0x3c:	SUB D, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C3							OUT -> D
+	0x3d:	SUB D, A
+		4)	C8	C9							ALU0 -> OUT
+		5)	C10	C3							OUT -> D
+	0x3e:	SUB D, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C3							OUT -> D
+	0x3f:	SUB D, 
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C3							OUT -> D
+
+##	MUL:
+	0x40:	MUL A, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x41:	MUL A, B
+	0x42:	MUL A, C
+	0x43:	MUL A, D
+	
+	0x44:	MUL B, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x45:	MUL B, A
+	0x46:	MUL B, C
+	0x47:	MUL B, D
+	
+	0x48:	MUL C, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x49:	MUL C, A
+	0x4a:	MUL C, B
+	0x4b:	MUL C, D
+	
+	0x4c:	MUL D, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x4d:	MUL D, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x4e:	MUL D, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x4f:	MUL D, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+
+##	DIV:
+	0x50:	DIV A, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x51:	DIV A, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x52:	DIV A, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x53:	DIV A, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	
+	0x54:	DIV B, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x55:	DIV B, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x56:	DIV B, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x57:	DIV B, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+
+	0x58:	DIV C, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x59:	DIV C, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x5a:	DIV C, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x5b:	DIV C, D
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	
+	0x5c:	DIV D, IMM
+		4)	C16	C25							PC -> MAR
+		5)	C24	C28	C27						RAM[MAR] -> MBR
+		6)	C26	C4	C17						MBR -> TMP | PC++
+		7)	C8	C11							ALU0 -> OUT
+		8)	C10	C0							OUT -> A
+		9)	C9	C11							ALU1 -> OUT
+		10)	C10	C1							OUT -> IMM
+	0x5d:	DIV D, A
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x5e:	DIV D, B
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+	0x5f:	DIV D, C
+		4)	C8	C11							ALU0 -> OUT
+		5)	C10	C0							OUT -> A
+		6)	C9	C11							ALU1 -> OUT
+		7)	C10	C1							OUT -> IMM
+
+### LOGIC Instructions:	0x60-0x7f
+
+###	JMP Instructions:	0x50-0x5f
+
+
+
+
